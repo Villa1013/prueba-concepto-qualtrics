@@ -1,25 +1,27 @@
-// import React from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import Qualtrics from 'react-native-qualtrics';
 
 export default function App() {
 
   function initMe() {
-    console.log("Initializing...");
-    Qualtrics.initializeProjectWithExtRefId(
-      'chiper', 'ZN_3RiJ4aRvLXcYmW2', 'SI_4ZpHlbrcPJD1BoW',
-      initializationResults => {
-      console.log(initializationResults);
-      console.log('Initialization Done');
-      },
-    );
+   Qualtrics.evaluateProject(targetingResults => {
+    console.log(targetingResults, ' targetingResults');
+    for (var intercept in targetingResults) {
+      let result = targetingResults[intercept];
+      if (result.passed) {
+        Qualtrics.display();
+      }
+    }
+    console.log('Evaluation Done');
+  });
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     // 'BRAND ID', 'PROJECT ID', 'INTERCEPT ID'
-    Qualtrics.initialize('chiper', 'ZN_3RiJ4aRvLXcYmW2', 'SI_4ZpHlbrcPJD1BoW', (initializationResult) => {
-      console.log(initializationResult)
+    Qualtrics.initializeProjectWithExtRefId('chiper', 'ZN_3RiJ4aRvLXcYmW2', '', (initializationResults) => {
+      console.log(initializationResults, ' test initializationResults')
       if (targetingResult.passed) {
         Qualtrics.displayTarget();
       }
